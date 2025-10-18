@@ -1,52 +1,163 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
-
 /*--------------------------------------------------------------
 # Variable classes
 --------------------------------------------------------------*/
 
 /* Font Families: */
 :root {
-    --default-font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-    --heading-font: "Inter", sans-serif;
-    --nav-font: "Inter", sans-serif;
+  --default-font:
+    'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans',
+    'Liberation Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+    'Noto Color Emoji';
+  --heading-font: 'Inter', sans-serif;
+  --nav-font: 'Inter', sans-serif;
+}
+
+/* Font Sizes: */
+:root {
+  --font-size-xs: 0.75rem; /* 12px */
+  --font-size-sm: 0.875rem; /* 14px */
+  --font-size-md: 1rem; /* 16px */
+  --font-size-lg: 1.125rem; /* 18px */
+  --font-size-xl: 1.25rem; /* 20px */
+  --font-size-2xl: 1.5rem; /* 24px */
+  --font-size-3xl: 1.875rem; /* 30px */
+  --font-size-4xl: 2.25rem; /* 36px */
+  --font-size-5xl: 3rem; /* 48px */
+  --font-size-6xl: 3.75rem; /* 60px */
+  --font-size-7xl: 4.5rem; /* 72px */
+  --font-size-8xl: 6rem; /* 96px */
+  --font-size-9xl: 8rem; /* 128px */
 }
 
 /* Color Library: */
 :root {
-    --light-color: #F4FFF7;
-    --default-color: #000;
-    --lesser-color: #737373;
-    --button-color: #A3D8D2;
-    --accent-color: #06432A;
-    --danger-light-color: #802A2A;
-    --deactivated-color: #FF7979;
-    /* --block-bg-dark-color: #0A2025; */
-    --lesser-dark-color: #9E9E9E;
-    --vibrant-dark-color: #2CA399;
-    --vibrant-dark-color: #165D6D;
-    --block-bg-dark-color: #06191D;
+  --light-color: #f4fff7;
+  --default-color: #000;
+  --lesser-color: #737373;
+  --button-color: #a3d8d2;
+  --accent-color: #06432a;
+  --danger-light-color: #802a2a;
+  --deactivated-color: #ff7979;
+  /* --block-bg-dark-color: #0A2025; */
+  --lesser-dark-color: #9e9e9e;
+  --vibrant-dark-color: #2ca399;
+  --vibrant-dark-color: #165d6d;
+  --block-bg-dark-color: #06191d;
 }
 
 /* Badge Colors */
 :root {
-    --connect-light-bg-color: #91CCB9;
-    --connect-dark-bg-color: #CAFFEE;
-    --connect-text-color: #06432A;
-    --connect-dark-text-color: #E0F2F1;
-    --service-light-bg-color: #FFD8B2;
-    --service-dark-bg-color: #FFBA75;
-    --service-text-color: #4F2400;
+  --connect-light-bg-color: #91ccb9;
+  --connect-dark-bg-color: #caffee;
+  --connect-text-color: #06432a;
+  --connect-dark-text-color: #e0f2f1;
+  --service-light-bg-color: #ffd8b2;
+  --service-dark-bg-color: #ffba75;
+  --service-text-color: #4f2400;
 }
 
 /* Gradients: */
 :root {
-    --bg-light: linear-gradient(180deg, #0D2325 0%, #0A3F3A 100%);
-    --bg-dark: linear-gradient(180deg, #0D2325 0%, #04272A 100%);
-    --nav-bg-light: linear-gradient(90deg, rgba(0, 36, 44, 0.90) 0%, rgba(17, 34, 38, 0.90) 100%);
-    --nav-light-stroke: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-    --selected: linear-gradient(90deg, #14C0CC 0%, #8BC9D4 100%);
-    --nav-bg-dark: linear-gradient(90deg, rgba(0, 36, 44, 0.90) 0%, rgba(17, 34, 38, 0.90) 100%);
-    --lines-dark: linear-gradient(180deg, #FFF 0%, #A5ECF2 100%);
-    --lines-light: radial-gradient(50% 50% at 50% 50%, #FFF 0%, #C4E0D7 100%);
-} 
+  --bg-light: linear-gradient(180deg, #0d2325 0%, #0a3f3a 100%);
+  --bg-dark: linear-gradient(180deg, #0d2325 0%, #04272a 100%);
+  --nav-bg-light: linear-gradient(90deg, rgba(0, 36, 44, 0.9) 0%, rgba(17, 34, 38, 0.9) 100%);
+  --nav-light-stroke: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  --selected: linear-gradient(90deg, #14c0cc 0%, #8bc9d4 100%);
+  --nav-bg-dark: linear-gradient(90deg, rgba(0, 36, 44, 0.9) 0%, rgba(17, 34, 38, 0.9) 100%);
+  --lines-dark: linear-gradient(180deg, #fff 0%, #a5ecf2 100%);
+  --lines-light: radial-gradient(50% 50% at 50% 50%, #fff 0%, #c4e0d7 100%);
+}
+
+/*--------------------------------------------------------------
+# Custom Classes
+--------------------------------------------------------------*/
+/* Fonts */
+.dark .default-text {
+  color: var(--light-color);
+}
+
+.default-text {
+  color: var(--default-color);
+}
+
+.lesser-text {
+  color: var(--lesser-color);
+}
+
+.dark .lesser-text {
+    color: var(--lesser-dark-color);
+}
+
+/* Nav bar*/
+.nav-bg {
+  background: var(--nav-bg-light);
+  color: var(--light-color);
+  border-bottom: 1px solid var(--nav-light-stroke);
+}
+
+.dark .nav-bg {
+  background: var(--nav-bg-dark) !important;
+}
+
+/*--------------------------------------------------------------
+# Header Styles
+--------------------------------------------------------------*/
+.header {
+  background: var(--nav-bg-light);
+  padding: 24px 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  justify-content: space-between;
+  align-items: center;
+height: 90px;
+}
+
+.company-title {
+  padding-left: 16px;
+  color: #fff;
+  font-family: Inter;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.nav-links-list .nav-link {
+  margin: 0 12px;
+  font-size: var(--font-size-md);
+  text-decoration: none;
+  color: var(--lesser-color);
+}
+
+.nav-links-list .nav-link.active {
+  font-weight: 500;
+  color: var(--light-color) !important;
+}
+
+.user-avatar {
+  width: 5vh;
+  height: 5vh;
+  border-radius: 9999px;
+  object-fit: cover;
+}
+
+.nav-section {
+    min-width: 10%;
+    max-width: 33%;
+}
+
+.nav-user-info p {
+  margin: 0;
+  padding: 0;
+}
+
+.nav-user-info .default-text {
+  font-size: var(--font-size-md);
+  font-weight: 500;
+}
+
+.nav-user-info .lesser-text {
+  font-size: var(--font-size-sm);
+  font-weight: 400;
+}
