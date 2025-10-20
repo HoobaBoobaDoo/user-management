@@ -1,7 +1,7 @@
 <script setup></script>
-<script setup></script>
 
 <template>
+  <div class="website">
   <header class="container-fluid header d-flex w-100 nav-bg position-relative">
     <div class="nav-section d-flex align-items-center position-relative">
       <img src="/assets/img/climatest-icon.svg" alt="Climatest Logo" class="logo" />
@@ -130,6 +130,7 @@
   </header>
   <div class="main">
   <router-view />
+  </div>
   </div>
 </template>
 

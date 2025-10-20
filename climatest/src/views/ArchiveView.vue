@@ -16,7 +16,13 @@
                     </svg>
                 </div>
                 <div class="col-11">
-                    <input type="text" class="long-input" placeholder="Search..." />
+                    <input
+                        v-model.trim="searchQuery"
+                        type="text"
+                        class="long-input"
+                        placeholder="Search..."
+                        @input="handleSearch"
+                    />
                 </div>
             </div>
             <div class="input-field">
@@ -34,7 +40,7 @@
             </div>
             <div class="input-field ">
                 <div class="col-2">
-                    <p class="lesser-text mb-0">Type</p>
+                    <p class="lesser-text mb-0">State</p>
                 </div>
                 <div class="col-10">
                     <select>
@@ -46,10 +52,10 @@
                 </div>
             </div>
             <div class="input-field">
-                <div class="col-2">
-                    <p class="lesser-text mb-0">Type</p>
+                <div class="col-4">
+                    <p class="lesser-text mb-0">Company</p>
                 </div>
-                <div class="col-10">
+                <div class="col-8">
                     <select>
                         <option value="all">All</option>
                         <option value="reports">Type 2</option>
@@ -74,22 +80,233 @@
                 <th>Type</th>
                 <th>State</th>
                 <th>Company</th>
+                <th></th>
             </tr>
-            <tr class="table-row">
-                <td>John Doe</td>
-                <td>(555) 123-4567</td>
-                <td>Type 1</td>
-                <td>Active</td>
-                <td>Company A</td>
-            </tr>
+            <tbody>
+                <template v-for="(user, index) in paginatedUsers" :key="user.id || user.email || index">
+                    <tr class="table-row">
+                        <td>
+                            <div class="row-6">
+                                <p>{{ user.firstName }} {{ user.lastName }}</p>
+                            </div>
+                            <div class="row-6">
+                                <p class="lesser-text">{{ user.email }}</p>
+                            </div>
+                        </td>
+
+                        <td>{{ user.phone }}</td>
+                        <td>
+                            <span :class="['type-badge', typeClass(user.type)]">
+                                {{ user.type }}
+                            </span>
+                        </td>
+                        <td>
+                            <span :class="{ 'status-deactivated': isDeactivated(user.status) }">
+                                {{ user.status }}
+                            </span>
+                        </td>
+                        <td width="15%">
+                            <div class="row-6">
+                                <p>{{ user.companyName }}</p>
+                            </div>
+                            <div class="row-6">
+                                <p class="lesser-text">{{ user.address }}</p>
+                            </div>
+                        </td>
+                        <td width="5%">
+                            <a href="#" class="unstyled">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 20 21"
+                                    fill="none">
+                                    <mask id="mask0_14_1048" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0"
+                                        y="0" width="20" height="21">
+                                        <rect y="0.5" width="20" height="20" fill="#D9D9D9" />
+                                    </mask>
+                                    <g mask="url(#mask0_14_1048)">
+                                        <path
+                                            d="M10.7885 10.5L6.9552 6.6667L7.83333 5.78857L12.5448 10.5L7.83333 15.2115L6.9552 14.3334L10.7885 10.5Z"
+                                            fill="black" />
+                                    </g>
+                                </svg>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr v-if="index < paginatedUsers.length - 1">
+                        <td colspan="6">
+                            <hr class="between" />
+                        </td>
+                    </tr>
+                </template>
+            </tbody>
+
         </table>
+        
     </div>
+    <div v-if="totalPages > 1" class="pagination d-flex justify-content-center align-items-center gap-8 mt-16">
+            <button
+                class="pagination-button arrow"
+                type="button"
+                :disabled="currentPage === 1"
+                @click="goToPage(currentPage - 1)"
+            >
+                ‹
+            </button>
+            <template v-for="(item, index) in paginationItems" :key="`pagination-${item.type}-${item.value || index}`">
+                <button
+                    v-if="item.type === 'page'"
+                    class="pagination-button"
+                    :class="{ active: item.value === currentPage }"
+                    type="button"
+                    @click="goToPage(item.value)"
+                >
+                    {{ item.value }}
+                </button>
+                <span v-else class="pagination-ellipsis">…</span>
+            </template>
+            <button
+                class="pagination-button arrow"
+                type="button"
+                :disabled="currentPage === totalPages"
+                @click="goToPage(currentPage + 1)"
+            >
+                ›
+            </button>
+        </div>
 </template>
 
 <script>
 export default {
-    name: 'ArchiveView'
+    name: 'ArchiveView',
+    data() {
+        return {
+            users: [],
+            currentPage: 1,
+            pageSize: 14,
+            searchQuery: ''
+        };
+    },
+    async mounted() {
+        await this.fetchUsers();
+    },
+    computed: {
+        paginatedUsers() {
+            const startIndex = (this.currentPage - 1) * this.pageSize;
+            return this.filteredUsers.slice(startIndex, startIndex + this.pageSize);
+        },
+        totalPages() {
+            return Math.max(Math.ceil(this.filteredUsers.length / this.pageSize), 1);
+        },
+        paginationItems() {
+            const items = [];
+            if (this.totalPages <= 5) {
+                for (let page = 1; page <= this.totalPages; page += 1) {
+                    items.push({ type: 'page', value: page });
+                }
+                return items;
+            }
+
+            const addPage = (page) => {
+                if (!items.some((item) => item.value === page)) {
+                    items.push({ type: 'page', value: page });
+                }
+            };
+
+            addPage(1);
+
+            const start = Math.max(2, this.currentPage - 1);
+            const end = Math.min(this.totalPages - 1, this.currentPage + 1);
+
+            if (start > 2) {
+                items.push({ type: 'ellipsis' });
+            }
+
+            for (let page = start; page <= end; page += 1) {
+                addPage(page);
+            }
+
+            if (end < this.totalPages - 1) {
+                items.push({ type: 'ellipsis' });
+            }
+
+            addPage(this.totalPages);
+
+            return items;
+        },
+        filteredUsers() {
+            if (!this.searchQuery) {
+                return this.users;
+            }
+
+            const query = this.searchQuery.toLowerCase();
+
+            return this.users.filter((user) => {
+                const valuesToCheck = [
+                    user.firstName,
+                    user.lastName,
+                    user.email,
+                    user.phone,
+                    user.type,
+                    user.status,
+                    user.companyName,
+                    user.address
+                ];
+
+                return valuesToCheck.some((value) => {
+                    if (value == null) {
+                        return false;
+                    }
+                    return String(value).toLowerCase().includes(query);
+                });
+            });
+        }
+    },
+    methods: {
+        async fetchUsers() {
+            try {
+                const response = await fetch('/api/users');
+                if (!response.ok) {
+                    throw new Error(`Request failed with status ${response.status}`);
+                }
+                this.users = await response.json();
+                this.ensurePageInRange();
+            } catch (error) {
+                console.error('Failed to load users', error);
+            }
+        },
+        goToPage(page) {
+            const clampedPage = Math.min(Math.max(page, 1), this.totalPages);
+            this.currentPage = clampedPage;
+        },
+        handleSearch() {
+            this.currentPage = 1;
+        },
+        ensurePageInRange() {
+            if (this.currentPage > this.totalPages) {
+                this.currentPage = this.totalPages;
+            }
+        },
+        isDeactivated(status) {
+            if (!status) {
+                return false;
+            }
+            return String(status).trim().toLowerCase() === 'deactivated';
+        },
+        typeClass(type) {
+            if (!type) {
+                return '';
+            }
+            const normalized = String(type).trim().toLowerCase();
+            if (normalized === 'service') {
+                return 'service';
+            }
+            if (normalized === 'connect') {
+                return 'connect';
+            }
+            return '';
+        }
+    }
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+
+</style>

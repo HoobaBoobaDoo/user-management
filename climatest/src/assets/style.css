@@ -52,9 +52,13 @@ body {
   --deactivated-color: #ff7979;
   /* --block-bg-dark-color: #0A2025; */
   --lesser-dark-color: #9e9e9e;
-  --vibrant-dark-color: #2ca399;
+  --vibrant-light-color: #2ca399;
   --vibrant-dark-color: #165d6d;
   --block-bg-dark-color: #06191d;
+
+  
+  --lines-dark: #a5ecf2;
+  --lines-light: #c4e0d7;
 }
 
 /* Badge Colors */
@@ -75,17 +79,24 @@ body {
   --nav-bg-light: linear-gradient(90deg, rgba(0, 36, 44, 0.9) 0%, rgba(17, 34, 38, 0.9) 100%);
   --nav-light-stroke: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
   --selected: linear-gradient(90deg, #14c0cc 0%, #8bc9d4 100%);
-  --nav-bg-dark: linear-gradient(90deg, rgba(0, 36, 44, 0.9) 0%, rgba(17, 34, 38, 0.9) 100%);
-  --lines-dark: linear-gradient(180deg, #fff 0%, #a5ecf2 100%);
-  --lines-light: radial-gradient(50% 50% at 50% 50%, #fff 0%, #c4e0d7 100%);
+  --nav-bg-dark: linear-gradient(90deg, rgba(0, 36, 44, 0.90) 0%, rgba(17, 34, 38, 0.90) 100%);
 }
 
 /*--------------------------------------------------------------
 # Custom Classes
 --------------------------------------------------------------*/
 
-/* Fonts */
-.dark .default-text {
+/* Dark mode: */
+
+.dark body {
+  background: var(--bg-dark) fixed;
+}
+
+.dark header {
+  background: var(--nav-bg-dark);
+}
+
+.dark * {
   color: var(--light-color);
 }
 
@@ -94,27 +105,82 @@ body {
 }
 
 .lesser-text {
-  color: var(--lesser-color);
+  color: var(--lesser-color) !important;
 }
 
-.dark .lesser-text {
+.dark .nav-links-list .nav-link * {
   color: var(--lesser-dark-color);
 }
 
-/* Nav bar*/
-.nav-bg {
-  background: var(--nav-bg-light);
-  color: var(--light-color);
-  border-bottom: 1px solid var(--nav-light-stroke);
+.dark .nav-links-list .nav-link.active,
+.dark .nav-links-list .nav-link.active * {
+  color: var(--light-color) !important;
 }
 
-.dark .nav-bg {
-  background: var(--nav-bg-dark) !important;
+.dark .lesser-text * {
+  color: var(--lesser-dark-color);
+}
+
+.dark .block {
+  background: var(--block-bg-dark-color);
+}
+
+.dark .input-field {
+  background: var(--block-bg-dark-color);
+}
+
+.dark .input-field svg {
+  color: #fff;
+  fill: #fff;
+  stroke: #fff;
+}
+
+.dark .user-list svg {
+  color: #fff;
+  fill: #fff;
+  stroke: #fff;
+}
+
+.dark .button {
+  background: var(--vibrant-dark-color);
+  border-radius: 8px;
+}
+
+.dark .header {
+  background: var(--nav-bg-dark);
+}
+
+.dark .between {
+  border: 1px solid var(--lines-dark);
+}
+
+.dark .nav-user-info p * {
+  color: var(--light-color);
+}
+
+.dark .pagination-button {
+    background: var(--vibrant-dark-color);
+}
+
+.dark .pagination-button:hover {
+    background: var(--light-color) !important;
+}
+
+.dark .table-row .type-badge.service {
+    background-color: var(--service-dark-bg-color) !important;
+}
+
+.table-row .type-badge.connect {
+    background-color: var(--connect-dark-bg-color) !important;
+}
+
+.pagination-button:hover:not(:disabled):not(.active) {
+    background-color: var(--vibrant-light-color) !important;
 }
 
 .block {
   gap: 20px;
-  padding: 20px;
+  padding: 50px;
 }
 
 /*--------------------------------------------------------------
@@ -148,6 +214,10 @@ body {
   color: var(--lesser-color);
 }
 
+.nav-link:hover {
+  color: var(--light-color) !important;
+}
+
 .nav-links-list .nav-link.active {
   font-weight: 500;
   color: var(--light-color) !important;
@@ -168,6 +238,7 @@ body {
 .nav-user-info p {
   margin: 0;
   padding: 0;
+  color: var(--light-color);
 }
 
 .nav-user-info .default-text {
@@ -184,7 +255,7 @@ body {
 
 body {
   font-family: var(--default-font);
-  background: var(--bg-light);
+  background: var(--bg-light) fixed;
   height: 100vh;
   width: 100vw;
   margin: 0;
@@ -214,7 +285,13 @@ body {
   height: 50px;
 }
 
+.input-field p {
+  width: fit-content;
+  position: relative;
+}
+
 input, select {
+  position: relative;
   border: none;
   outline: none;
   font-size: var(--font-size-md);
@@ -260,6 +337,11 @@ input, select {
   text-align: center;
 }
 
+.button:hover {
+  background: var(--vibrant-dark-color);
+  border-radius: 8px;
+}
+
 .long-input {
   min-width: 300px;
 }
@@ -284,4 +366,96 @@ input, select {
 .table-header * {
   font-weight: 600;
   text-align: left;
+}
+
+.table-row {
+  padding: 0;
+  margin: 0;
+}
+
+.table-row .status-deactivated {
+  color: var(--deactivated-color);
+}
+
+.table-row .type-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 16px;
+  border-radius: 99999999px;
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  text-transform: capitalize;
+}
+
+.table-row .type-badge.service {
+  background-color: var(--service-light-bg-color);
+  color: var(--service-text-color);
+}
+
+.table-row .type-badge.connect {
+  background-color: var(--connect-light-bg-color);
+  color: var(--connect-text-color);
+}
+
+.between {
+  border: 1px solid var(--lines-light);
+  width: 100%;
+}
+
+.table-row p {
+  padding: 0;
+  margin: 0;
+}
+
+.pagination {
+    gap: 0.75rem;
+    padding: 50px 0;
+}
+
+.pagination-button {
+    width: 30px;
+    height: 30px;
+    padding: 5px;
+    border: none;
+    border-radius: 0.5rem;
+    background-color: var(--vibrant-light-color);
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 0.95rem;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.pagination-button:hover:not(:disabled):not(.active) {
+    background-color: var(--vibrant-dark-color);
+}
+
+.pagination-button:disabled {
+    opacity: 0.4;
+    cursor: default;
+}
+
+.pagination-button.active {
+    background-color: #ffffff;
+    color: var(--default-color);
+}
+
+.pagination-button.arrow {
+    background-color: transparent;
+    color: #ffffff;
+}
+
+.pagination-ellipsis {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.25rem;
+    height: 2.25rem;
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 1.1rem;
 }
