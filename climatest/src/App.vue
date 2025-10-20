@@ -128,7 +128,9 @@
       </div>
     </div>
   </header>
+  <div class="main">
   <router-view />
+  </div>
 </template>
 
 <style scoped></style>

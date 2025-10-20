@@ -1,5 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
+*,
+html,
+body {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-weight: 500;
+}
+
+
 /*--------------------------------------------------------------
 # Variable classes
 --------------------------------------------------------------*/
@@ -36,7 +46,7 @@
   --light-color: #f4fff7;
   --default-color: #000;
   --lesser-color: #737373;
-  --button-color: #a3d8d2;
+  --button-color: #2CA399;
   --accent-color: #06432a;
   --danger-light-color: #802a2a;
   --deactivated-color: #ff7979;
@@ -73,6 +83,7 @@
 /*--------------------------------------------------------------
 # Custom Classes
 --------------------------------------------------------------*/
+
 /* Fonts */
 .dark .default-text {
   color: var(--light-color);
@@ -87,7 +98,7 @@
 }
 
 .dark .lesser-text {
-    color: var(--lesser-dark-color);
+  color: var(--lesser-dark-color);
 }
 
 /* Nav bar*/
@@ -101,16 +112,23 @@
   background: var(--nav-bg-dark) !important;
 }
 
+.block {
+  gap: 20px;
+  padding: 20px;
+}
+
 /*--------------------------------------------------------------
-# Header Styles
+# Styles
 --------------------------------------------------------------*/
+
+/*Header Styles*/
 .header {
   background: var(--nav-bg-light);
   padding: 24px 16px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   justify-content: space-between;
   align-items: center;
-height: 90px;
+  height: 90px;
 }
 
 .company-title {
@@ -143,8 +161,8 @@ height: 90px;
 }
 
 .nav-section {
-    min-width: 10%;
-    max-width: 33%;
+  min-width: 10%;
+  max-width: 33%;
 }
 
 .nav-user-info p {
@@ -160,4 +178,110 @@ height: 90px;
 .nav-user-info .lesser-text {
   font-size: var(--font-size-sm);
   font-weight: 400;
+}
+
+/* Body, container & main styles */
+
+body {
+  font-family: var(--default-font);
+  background: var(--bg-light);
+  height: 100vh;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+}
+
+.main {
+  margin: 30px 10vw;
+}
+
+/* Filters and Search Bar Styles */
+
+.tools {
+  align-items: center;
+  width: 100%;
+  gap: 20px;
+}
+
+.input-field {
+  display: flex;
+  width: fit-content;
+  padding: 16px;
+  align-items: center;
+  gap: 20px;
+  border-radius: 8px;
+  background: var(--light-color);
+  height: 50px;
+}
+
+input, select {
+  border: none;
+  outline: none;
+  font-size: var(--font-size-md);
+  background: none;
+  padding: none;
+  margin: none;
+  min-width: 90px;
+  max-width: 300px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-around;
+  margin: 0;
+  background: var(--button-color);
+  width: fit-content;
+  border-radius: 8px;
+  font-weight: 600;
+  color: var(--light-color);
+  max-height: 50px;
+  text-align: center;
+}
+
+.button-container p {
+  margin: 0;
+  padding: 0;
+  margin-right: 10px;
+  font-size: var(--font-size-lg);
+  font-weight: 400;
+}
+
+.button {
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  border: none;
+  background: none;
+  color: var(--light-color);
+  width: 150px;
+  padding: 14px 16px 16px 12px;
+  text-align: center;
+}
+
+.long-input {
+  min-width: 300px;
+}
+
+/* User list styles */
+.user-list {
+  margin-top: 30px;
+  background: var(--light-color);
+  width: 100%;
+  height: fit-content;
+  border-radius: 8px;
+  gap: 20px;
+}
+
+.table-header {
+  margin-bottom: 30px;
+  height: fit-content;
+  height: 50px;
+  vertical-align: top;
+}
+
+.table-header * {
+  font-weight: 600;
+  text-align: left;
 }
