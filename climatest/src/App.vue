@@ -203,7 +203,7 @@ const closeMobileMenu = () => {
     </div>
     
     <!-- Desktop Navigation -->
-    <div class="nav-section nav-pages d-flex justify-content-space-between position-relative desktop-nav d-md-none d-block" :class="{ 'mobile-menu-open': isMobileMenuOpen }">
+    <div class="nav-section nav-pages d-flex justify-content-space-between position-relative desktop-nav">
 
       <ul class="nav-links-list d-flex list-unstyled m-0 p-0">
         <li class="nav-item">
