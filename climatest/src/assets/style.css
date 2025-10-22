@@ -161,6 +161,11 @@ body {
   border-radius: 8px;
 }
 
+.dark .button:hover {
+  background: var(--vibrant-light-color);
+  color: var(--default-color);
+}
+
 .dark .header {
   background: var(--nav-bg-dark);
 }
@@ -210,6 +215,10 @@ body {
 .block {
   gap: 20px;
   padding: 50px;
+  padding-top: 20px;
+  border-radius: 8px;
+  background: var(--light-color);
+  color: var(--default-color);
 }
 
 /*--------------------------------------------------------------
@@ -342,7 +351,8 @@ body {
 }
 
 .main {
-  margin: 30px 10vw;
+  padding: 30px 10vw;
+  background: var(--bg-light) fixed;
 }
 
 /* Filters and Search Bar Styles */
@@ -886,4 +896,271 @@ select option:checked {
 
 .dark .modal{
     background: var(--bg-dark) !important;
+}
+
+/*
+----------------------------------------------------------------
+Detail page: 
+----------------------------------------------------------------*/
+
+.detail-view {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 32px;
+}
+
+.back-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: var(--light-color);
+    font-size: var(--font-size-md);
+    font-weight: 500;
+    transition: opacity 0.2s ease;
+}
+
+.back-button:hover {
+    opacity: 0.8;
+}
+
+.back-button svg {
+    width: 20px;
+    height: 20px;
+}
+
+.user-header {
+    margin-bottom: 32px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.user-name {
+    font-size: var(--font-size-3xl);
+    font-weight: 700;
+    margin: 0;
+    color: var(--light-color);
+}
+
+.delete-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    background: var(--danger-light-color);
+    color: var(--light-color);
+    border: none;
+    border-radius: 8px;
+    font-size: var(--font-size-md);
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.delete-button:hover {
+    opacity: 0.9;
+}
+
+.info-card {
+    background: var(--light-color);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 24px;
+}
+
+.card-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.card-header h3 {
+    margin: 0;
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--default-color);
+    padding-bottom: 40px;
+}
+
+.edit-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--vibrant-light-color);
+    color: var(--light-color);
+    border: none;
+    border-radius: 6px;
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.edit-button:hover {
+    background: var(--vibrant-dark-color);
+}
+
+.card-body {
+    padding: 24px;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.info-item.full-width {
+    grid-column: 1 / -1;
+}
+
+.info-item label {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--lesser-color);
+    margin: 0;
+}
+
+.info-item p {
+    font-size: var(--font-size-md);
+    font-weight: 500;
+    color: var(--default-color);
+    margin: 0;
+}
+
+.loading {
+    text-align: center;
+    padding: 48px;
+    font-size: var(--font-size-lg);
+    color: var(--light-color);
+}
+
+.mb-24 {
+    margin-bottom: 24px;
+}
+
+.mb-32 {
+    margin-bottom: 32px;
+}
+
+.gap-8 {
+    gap: 8px;
+}
+
+.gap-16 {
+    gap: 16px;
+}
+
+@media (max-width: 768px) {
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .info-item.full-width {
+        grid-column: 1;
+    }
+}
+
+/* Status and Type Badge Styles*/
+.status-deactivated {
+    color: var(--deactivated-color);
+}
+
+.status-inactive {
+    color: var(--lesser-color);
+}
+
+.type-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 7px 16px;
+    border-radius: 99999999px;
+    font-weight: 600;
+    font-size: var(--font-size-sm);
+    text-transform: capitalize;
+}
+
+.type-badge.service {
+    background-color: var(--service-light-bg-color);
+    color: var(--service-text-color);
+}
+
+.type-badge.connect {
+    background-color: var(--connect-light-bg-color);
+    color: var(--connect-text-color);
+}
+
+.dark .detail-view h3,
+.dark .detail-view p,
+.dark .detail-view label {
+    color: var(--light-color);
+}
+
+.dark .detail-view .lesser-text {
+    color: var(--lesser-dark-color);
+}
+
+.status-deactivated {
+    color: var(--deactivated-color);
+}
+
+.status-inactive {
+    color: var(--lesser-color);
+}
+
+.type-badge {
+    display: inline-flex;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.type-badge.service {
+    background-color: var(--service-light-bg-color);
+    color: var(--service-text-color);
+}
+
+.type-badge.connect {
+    background-color: var(--connect-light-bg-color);
+    color: var(--connect-text-color);
+}
+
+.modal-field.full-width {
+    grid-column: 1 / -1;
+}
+
+.modal-field textarea {
+    width: 100%;
+    resize: vertical;
+    min-height: 80px;
+    font-family: inherit;
+    background: none;
+    border: 1px solid var(--light-color);
+    border-radius: 8px;
+    padding: 8px;
+    color: var(--light-color);
+}
+
+.dark .modal-field textarea { 
+    background: var(--dark-bg-color);
+    border: none;
+}
+
+.line {
+  background: var(--light-color);
+  height: 2px;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.dark .line {
+  background: var(--selected);
 }

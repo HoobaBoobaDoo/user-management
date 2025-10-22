@@ -11,12 +11,14 @@ const router = createRouter({
     {
       path: '/archive',
       name: 'Archive',
-      component: () => import('../views/ArchiveView.vue')
-    },
-    {
-      path: '/detail/:id',
-      name: 'Detail',
-      component: () => import('../views/DetailView.vue')
+      component: () => import('../views/ArchiveView.vue'),
+      children: [
+        {
+          path: ':id',
+          name: 'Detail',
+          component: () => import('../views/DetailView.vue')
+        }
+      ]
     },
     {
       path: '/messages',

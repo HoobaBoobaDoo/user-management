@@ -81,7 +81,6 @@ const closeDropdown = () => {
             to="/archive"
             class="nav-link"
             active-class="active"
-            exact-active-class="active"
           >
             <svg
               class="nav-icon"

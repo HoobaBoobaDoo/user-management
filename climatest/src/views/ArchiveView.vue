@@ -1,4 +1,8 @@
 <template>
+    <!-- Show child route (DetailView) when present, otherwise show archive list -->
+    <router-view v-if="$route.params.id" />
+    
+    <div v-else>
     <div class="top-archive d-flex justify-content-space-between align-items-center position-relative">
         <div class="tools d-flex">
             <div class="input-field">
@@ -109,7 +113,7 @@
                             </div>
                         </td>
                         <td width="5%">
-                            <router-link :to="`/detail/${user.id}`" class="unstyled">
+                            <router-link :to="`/archive/${user.id}`" class="unstyled">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 20 21"
                                     fill="none">
                                     <mask id="mask0_14_1048" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0"
@@ -221,6 +225,7 @@
             </div>
         </div>
     </teleport>
+    </div>
 </template>
 
 <script>
@@ -252,6 +257,14 @@ export default {
     },
     async mounted() {
         await this.fetchUsers();
+    },
+    watch: {
+        '$route'(to, from) {
+            // Refresh the user list when returning from DetailView
+            if (to.path === '/archive' && from.path.startsWith('/archive/')) {
+                this.fetchUsers();
+            }
+        }
     },
     computed: {
         paginatedUsers() {
