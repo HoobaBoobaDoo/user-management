@@ -1599,6 +1599,28 @@
       "postalCode": 3500,
       "address": "Juliana Place",
       "vatNumber": "BE 0631.879.378"
+    },
+    {
+      "firstName": "Ruben",
+      "lastName": "Jamart",
+      "email": "ruben.jamart@gmail.com",
+      "phone": "+32456038318",
+      "type": "service",
+      "status": "active",
+      "companyName": "Climapulse",
+      "address": "Kempische Steenweg",
+      "id": 100
+    },
+    {
+      "firstName": "Ruben",
+      "lastName": "Jamart",
+      "email": "ruben.jamart@gmail.com",
+      "phone": "sdfsffsfs",
+      "type": "service",
+      "status": "inactive",
+      "companyName": "sfsfs",
+      "address": "sfsfsf",
+      "id": 101
     }
   ]
 }

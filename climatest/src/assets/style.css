@@ -55,6 +55,9 @@ body {
   --vibrant-light-color: #2ca399;
   --vibrant-dark-color: #165d6d;
   --block-bg-dark-color: #06191d;
+  --user-hover-light-color: #D5EDE4;
+  --user-hover-dark-color: #1F4245;
+
 
   
   --lines-dark: #a5ecf2;
@@ -75,9 +78,9 @@ body {
 /* Gradients: */
 :root {
   --bg-light: linear-gradient(180deg, #0d2325 0%, #0a3f3a 100%);
-  --bg-dark: linear-gradient(180deg, #0d2325 0%, #04272a 100%);
+  --bg-dark: linear-gradient(180deg, #0D2325 0%, #04272A 100%);
   --nav-bg-light: linear-gradient(90deg, rgba(0, 36, 44, 0.9) 0%, rgba(17, 34, 38, 0.9) 100%);
-  --nav-light-stroke: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  --nav-light-stroke: linear-gradient(90deg, #00818B 0%, #949494 100%);
   --selected: linear-gradient(90deg, #14c0cc 0%, #8bc9d4 100%);
   --nav-bg-dark: linear-gradient(90deg, rgba(0, 36, 44, 0.90) 0%, rgba(17, 34, 38, 0.90) 100%);
 }
@@ -88,7 +91,7 @@ body {
 
 /* Dark mode: */
 
-.dark body {
+.dark .main {
   background: var(--bg-dark) fixed;
 }
 
@@ -112,9 +115,21 @@ body {
   color: var(--lesser-dark-color);
 }
 
+.dark .nav-links-list .nav-link .nav-icon {
+  fill: var(--lesser-dark-color);
+}
+
+.dark .nav-links-list .nav-link:hover .nav-icon {
+  fill: var(--light-color);
+}
+
 .dark .nav-links-list .nav-link.active,
 .dark .nav-links-list .nav-link.active * {
   color: var(--light-color) !important;
+}
+
+.dark .nav-links-list .nav-link.active .nav-icon {
+  fill: var(--light-color);
 }
 
 .dark .lesser-text * {
@@ -170,6 +185,20 @@ body {
     background-color: var(--service-dark-bg-color) !important;
 }
 
+.dark input, .dark select {
+  background: none;
+}
+
+.dark select option {
+  background: var(--block-bg-dark-color);
+  color: var(--light-color);
+}
+
+.dark select option:hover, .dark select option:focus, .dark select option:active {
+  background: var(--vibrant-dark-color);
+  color: var(--light-color);
+}
+
 .table-row .type-badge.connect {
     background-color: var(--connect-dark-bg-color) !important;
 }
@@ -195,6 +224,7 @@ body {
   justify-content: space-between;
   align-items: center;
   height: 90px;
+  position: relative;
 }
 
 .company-title {
@@ -212,15 +242,59 @@ body {
   font-size: var(--font-size-md);
   text-decoration: none;
   color: var(--lesser-color);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.nav-item {
+  position: relative;
+}
+
+.nav-item::after {
+  content: '';
+  position: absolute;
+  bottom: -27px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--selected);
+  opacity: 0;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  z-index: 10;
+}
+
+.nav-item:has(.nav-link.active)::after {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+.nav-icon {
+  fill: var(--lesser-color);
+  width: 20px;
+  height: 20px;
+  transition: fill 0.3s ease;
 }
 
 .nav-link:hover {
   color: var(--light-color) !important;
 }
 
+.nav-link:hover .nav-icon {
+  fill: var(--light-color);
+}
+
 .nav-links-list .nav-link.active {
   font-weight: 500;
   color: var(--light-color) !important;
+}
+
+.nav-links-list .nav-link.active .nav-icon {
+  fill: var(--light-color);
 }
 
 .user-avatar {
@@ -249,6 +323,11 @@ body {
 .nav-user-info .lesser-text {
   font-size: var(--font-size-sm);
   font-weight: 400;
+}
+
+.nav-border {
+  background: var(--nav-light-stroke);
+  height: 1px;
 }
 
 /* Body, container & main styles */
@@ -283,23 +362,79 @@ body {
   border-radius: 8px;
   background: var(--light-color);
   height: 50px;
+  border: none;
 }
+
 
 .input-field p {
   width: fit-content;
   position: relative;
 }
 
-input, select {
+input,
+select {
   position: relative;
   border: none;
   outline: none;
   font-size: var(--font-size-md);
   background: none;
-  padding: none;
-  margin: none;
+  padding: 0;
+  margin: 0;
   min-width: 90px;
   max-width: 300px;
+}
+
+select {
+  background-color: var(--light-color);
+  color: var(--default-color);
+  cursor: pointer;
+  outline: none;
+}
+
+select option {
+  background-color: var(--light-color);
+  color: var(--default-color);
+  padding: 10px 12px;
+  font-size: var(--font-size-md);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+select option:hover,
+select option:focus,
+select option:checked {
+  background: linear-gradient(90deg, var(--vibrant-light-color) 0%, var(--vibrant-dark-color) 100%);
+  color: var(--light-color);
+}
+
+.dark select {
+  background: var(--block-bg-dark-color);
+  color: var(--light-color);
+}
+
+.dark select option {
+  background: var(--block-bg-dark-color);
+  color: var(--light-color);
+  padding: 10px 12px;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.dark select option:hover,
+.dark select option:focus,
+.dark select option:checked {
+  background: linear-gradient(90deg, var(--vibrant-dark-color) 0%, var(--vibrant-light-color) 100%);
+  color: var(--light-color);
+  font-weight: 600;
 }
 
 .button-container {
@@ -335,6 +470,7 @@ input, select {
   width: 150px;
   padding: 14px 16px 16px 12px;
   text-align: center;
+  transition: background 0.3s ease, border-radius 0.3s ease;
 }
 
 .button:hover {
@@ -369,12 +505,33 @@ input, select {
 }
 
 .table-row {
-  padding: 0;
   margin: 0;
+  transition: background-color 0.3s ease;
+}
+
+.table-row td {
+  padding: 10px 0;
+  transition: padding 0.3s ease;
+}
+
+.table-row:hover {
+  background-color: var(--user-hover-light-color);
+}
+
+.table-row:hover td {
+  padding: 12px 0;
+}
+
+.dark .table-row:hover {
+  background-color: var(--user-hover-dark-color);
 }
 
 .table-row .status-deactivated {
   color: var(--deactivated-color);
+}
+
+.table-row .status-inactive {
+  color: var(--lesser-color);
 }
 
 .table-row .type-badge {
@@ -400,11 +557,36 @@ input, select {
 .between {
   border: 1px solid var(--lines-light);
   width: 100%;
+  padding: 0;
+  margin: 0;
 }
 
 .table-row p {
   padding: 0;
   margin: 0;
+}
+
+.table-row a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.table-row a:hover {
+  background-color: var(--connect-light-color);
+  transform: scale(1.1);
+}
+
+.dark .table-row a:hover {
+  background-color: var(--vibrant-dark-color);
+}
+
+.table-row a svg {
+  transition: fill 0.3s ease;
 }
 
 .pagination {
@@ -427,7 +609,7 @@ input, select {
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: background-color 0.2s ease, color 0.2s ease;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .pagination-button:hover:not(:disabled):not(.active) {
@@ -447,6 +629,12 @@ input, select {
 .pagination-button.arrow {
     background-color: transparent;
     color: #ffffff;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.pagination-button.arrow:hover:not(:disabled) {
+    background-color: var(--vibrant-light-color);
+    border-radius: 50%;
 }
 
 .pagination-ellipsis {
@@ -458,4 +646,244 @@ input, select {
     color: #ffffff;
     font-weight: 600;
     font-size: 1.1rem;
+}
+
+/* Model for creating a user */
+.modal-backdrop {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    background: rgba(0, 0, 0, 0.6) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 1000 !important;
+    padding: 16px !important;
+    animation: fadeInBackdrop 0.3s ease-out;
+}
+
+@keyframes fadeInBackdrop {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.modal {
+    width: 100% !important;
+    max-width: 640px !important;
+    height: fit-content !important;
+    background: var(--bg-light) !important;
+    color: var(--lines-light) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25) !important;
+    overflow: hidden !important;
+    display: block !important;
+    position: static !important;
+    margin: 0 !important;
+    border: none !important;
+    animation: modalSlideIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-50px) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 24px;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: var(--light-color);
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: inherit;
+}
+
+.modal-body {
+    display: grid;
+    gap: 16px;
+    padding: 24px;
+}
+
+.modal-body label {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-weight: 600;
+    color: var(--default-color);
+    color: var(--light-color);
+}
+
+.modal-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.modal-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-weight: 600;
+    color: var(--default-color);
+}
+
+@media (max-width: 640px) {
+    .modal-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+.modal-body input,
+.modal-body select {
+    border: 1px solid var(--lines-light);
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-size: var(--font-size-md);
+    color: var(--light-color);
+    font-style: italic;
+    background: none;
+}
+
+.modal-feedback {
+    padding: 12px 16px;
+    border-radius: 6px;
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    margin-top: 8px;
+}
+
+.modal-feedback.success {
+    background-color: rgba(44, 163, 153, 0.2);
+    color: var(--vibrant-light-color);
+    border: 1px solid var(--vibrant-light-color);
+}
+
+.modal-feedback.error {
+    background-color: rgba(255, 121, 121, 0.2);
+    color: var(--deactivated-color);
+    border: 1px solid var(--deactivated-color);
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding-top: 8px;
+    border: none !important;
+}
+
+.modal .button{
+    width: auto;
+    padding: 10px 20px;
+    border-radius: 6px;
+    transition: background 0.3s ease;
+}
+
+.modal .button.secondary {
+    background: transparent;
+    color: var(--default-color);
+}
+
+.modal .button.primary {
+    background: var(--vibrant-light-color);
+}
+
+.modal .button.primary:hover {
+    background: var(--vibrant-dark-color);
+}
+
+.modal .button.secondary {
+    color: var(--light-color);
+    font-style: italic;
+}
+
+/* Theme dropdown */
+.theme-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 8px;
+    background: var(--light-color);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    z-index: 100;
+    min-width: 160px;
+    animation: dropdownSlideIn 0.3s ease-out;
+    transform-origin: top right;
+}
+
+@keyframes dropdownSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.dark .theme-dropdown {
+    background: var(--block-bg-dark-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.theme-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    cursor: pointer;
+    color: var(--default-color);
+    font-size: var(--font-size-md);
+    font-weight: 500;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dark .theme-option {
+    color: var(--light-color);
+}
+
+.theme-option:hover {
+    background: var(--vibrant-light-color);
+    color: var(--light-color);
+}
+
+.dark .theme-option:hover {
+    background: var(--vibrant-dark-color);
+}
+
+.theme-option svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+
+.dark .modal{
+    background: var(--bg-dark) !important;
 }

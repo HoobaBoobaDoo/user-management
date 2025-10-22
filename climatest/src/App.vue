@@ -1,7 +1,39 @@
-<script setup></script>
+<script setup>
+import { ref, onMounted, watch } from 'vue';
+
+const isDarkMode = ref(false);
+const showThemeDropdown = ref(false);
+
+// Load theme from localStorage on mount
+onMounted(() => {
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'dark') {
+    isDarkMode.value = true;
+  } else if (savedTheme === 'light') {
+    isDarkMode.value = false;
+  }
+});
+
+// Watch for theme changes and save to localStorage
+watch(isDarkMode, (newValue) => {
+  localStorage.setItem('theme', newValue ? 'dark' : 'light');
+});
+
+const toggleTheme = () => {
+  isDarkMode.value = !isDarkMode.value;
+};
+
+const toggleDropdown = () => {
+  showThemeDropdown.value = !showThemeDropdown.value;
+};
+
+const closeDropdown = () => {
+  showThemeDropdown.value = false;
+};
+</script>
 
 <template>
-  <div class="website">
+  <div class="website" :class="{ dark: isDarkMode }">
   <header class="container-fluid header d-flex w-100 nav-bg position-relative">
     <div class="nav-section d-flex align-items-center position-relative">
       <img src="/assets/img/climatest-icon.svg" alt="Climatest Logo" class="logo" />
@@ -123,11 +155,27 @@
         <p>Ruben Jamart</p>
         <p class="lesser-text">Online</p>
       </div>
-      <div class="col-4">
-        <a href="#"><img src="./assets/img/pfp.jpg" alt="User Avatar" class="user-avatar" /></a>
+      <div class="col-4 position-relative">
+        <a href="#" @click.prevent="toggleDropdown">
+          <img src="./assets/img/pfp.jpg" alt="User Avatar" class="user-avatar" />
+        </a>
+        <div v-if="showThemeDropdown" class="theme-dropdown" @click.stop>
+          <div class="theme-option" @click="toggleTheme">
+            <svg v-if="!isDarkMode" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M10 15C11.3261 15 12.4783 14.5272 13.4565 13.5815C14.4348 12.6359 14.9239 11.5054 14.9239 10.1902C14.9239 8.875 14.4348 7.74456 13.4565 6.79891C12.4783 5.85326 11.3261 5.38043 10 5.38043C8.67391 5.38043 7.52174 5.85326 6.54348 6.79891C5.56522 7.74456 5.07609 8.875 5.07609 10.1902C5.07609 11.5054 5.56522 12.6359 6.54348 13.5815C7.52174 14.5272 8.67391 15 10 15ZM10 16.25C8.35326 16.25 6.94565 15.6685 5.77717 14.5054C4.60869 13.3424 4.02445 11.9402 4.02445 10.2989C4.02445 8.65761 4.60869 7.25543 5.77717 6.09239C6.94565 4.92935 8.35326 4.34783 10 4.34783C11.6467 4.34783 13.0543 4.92935 14.2228 6.09239C15.3913 7.25543 15.9755 8.65761 15.9755 10.2989C15.9755 11.9402 15.3913 13.3424 14.2228 14.5054C13.0543 15.6685 11.6467 16.25 10 16.25ZM3.33333 10.8152H0.625V9.56522H3.33333V10.8152ZM19.375 10.8152H16.6667V9.56522H19.375V10.8152ZM9.375 3.33333V0.625H10.625V3.33333H9.375ZM9.375 19.375V16.6667H10.625V19.375H9.375ZM4.89167 5.69167L2.95833 3.75833L3.84167 2.875L5.775 4.80833L4.89167 5.69167ZM16.1583 17.125L14.225 15.1917L15.1083 14.3083L17.0417 16.2417L16.1583 17.125ZM14.225 4.80833L16.1583 2.875L17.0417 3.75833L15.1083 5.69167L14.225 4.80833ZM2.95833 16.2417L4.89167 14.3083L5.775 15.1917L3.84167 17.125L2.95833 16.2417Z" fill="currentColor"/>
+            </svg>
+            <svg v-else xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M10 18.3333C8.73611 18.3333 7.54861 18.0903 6.4375 17.6042C5.32639 17.1181 4.36806 16.4583 3.5625 15.625C2.75694 14.7917 2.11806 13.8056 1.64583 12.6667C1.17361 11.5278 0.9375 10.3056 0.9375 9C0.9375 7.75 1.17361 6.59028 1.64583 5.52083C2.11806 4.45139 2.75694 3.52083 3.5625 2.72917C4.36806 1.9375 5.34722 1.30556 6.5 0.833333C7.65278 0.361111 8.86806 0.125 10.1458 0.125C10.6458 0.125 11.125 0.145833 11.5833 0.1875C12.0417 0.229167 12.5 0.291667 12.9583 0.375C12.5139 0.791667 12.1458 1.27778 11.8542 1.83333C11.5625 2.38889 11.4167 3 11.4167 3.66667C11.4167 4.875 11.8472 5.88889 12.7083 6.70833C13.5694 7.52778 14.6389 7.9375 15.9167 7.9375C16.5556 7.9375 17.1528 7.79861 17.7083 7.52083C18.2639 7.24306 18.7361 6.90278 19.125 6.5C19.2083 6.95833 19.2708 7.41667 19.3125 7.875C19.3542 8.33333 19.375 8.79167 19.375 9.25C19.375 10.5972 19.125 11.8542 18.625 13.0208C18.125 14.1875 17.4514 15.2014 16.6042 16.0625C15.7569 16.9236 14.7639 17.6042 13.625 18.1042C12.4861 18.6042 11.2778 18.3333 10 18.3333ZM10 17.0833C10.8889 17.0833 11.7292 16.9167 12.5208 16.5833C13.3125 16.25 14.0208 15.7917 14.6458 15.2083C15.2708 14.625 15.7708 13.9375 16.1458 13.1458C16.5208 12.3542 16.7361 11.5 16.7917 10.5833C16.4583 10.6944 16.1319 10.7708 15.8125 10.8125C15.4931 10.8542 15.1806 10.875 14.875 10.875C13.1667 10.875 11.7153 10.2639 10.5208 9.04167C9.32639 7.81944 8.72917 6.33333 8.72917 4.58333C8.72917 4.27778 8.74306 3.98611 8.77083 3.70833C8.79861 3.43056 8.86111 3.11111 8.95833 2.75C8.04167 3.08333 7.20139 3.5625 6.4375 4.1875C5.67361 4.8125 5.01389 5.54167 4.45833 6.375C3.90278 7.20833 3.47222 8.11111 3.16667 9.08333C2.86111 10.0556 2.70833 11.0556 2.70833 12.0833C2.70833 14.1389 3.42361 15.8819 4.85417 17.3125C6.28472 18.7431 7.97222 19.4583 10 19.4583Z" fill="currentColor"/>
+            </svg>
+            <span>{{ isDarkMode ? 'Light Mode' : 'Dark Mode' }}</span>
+          </div>
+        </div>
       </div>
     </div>
   </header>
+  <div class="nav-border position-relative">
+    <div class="nav-active-indicator"></div>
+  </div>
   <div class="main">
   <router-view />
   </div>

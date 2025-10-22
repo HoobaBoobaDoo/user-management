@@ -16,13 +16,8 @@
                     </svg>
                 </div>
                 <div class="col-11">
-                    <input
-                        v-model.trim="searchQuery"
-                        type="text"
-                        class="long-input"
-                        placeholder="Search..."
-                        @input="handleSearch"
-                    />
+                    <input v-model.trim="searchQuery" type="text" class="long-input" placeholder="Search..."
+                        @input="handleSearch" />
                 </div>
             </div>
             <div class="input-field">
@@ -30,11 +25,11 @@
                     <p class="lesser-text mb-0 tool-label">Type</p>
                 </div>
                 <div class="col-10">
-                    <select>
-                        <option value="all">All</option>
-                        <option value="reports">Type 2</option>
-                        <option value="messages">Type 3</option>
-                        <option value="alerts">Type 4</option>
+                    <select v-model="filterType" @change="handleFilterChange">
+                        <option value="">All</option>
+                        <option v-for="type in uniqueTypes" :key="type" :value="type">
+                            {{ type.charAt(0).toUpperCase() + type.slice(1) }}
+                        </option>
                     </select>
                 </div>
             </div>
@@ -43,11 +38,11 @@
                     <p class="lesser-text mb-0">State</p>
                 </div>
                 <div class="col-10">
-                    <select>
-                        <option value="all">All</option>
-                        <option value="reports">Type 2</option>
-                        <option value="messages">Type 3</option>
-                        <option value="alerts">Type 4</option>
+                    <select v-model="filterStatus" @change="handleFilterChange">
+                        <option value="">All</option>
+                        <option v-for="status in uniqueStatuses" :key="status" :value="status">
+                            {{ status.charAt(0).toUpperCase() + status.slice(1) }}
+                        </option>
                     </select>
                 </div>
             </div>
@@ -56,17 +51,17 @@
                     <p class="lesser-text mb-0">Company</p>
                 </div>
                 <div class="col-8">
-                    <select>
-                        <option value="all">All</option>
-                        <option value="reports">Type 2</option>
-                        <option value="messages">Type 3</option>
-                        <option value="alerts">Type 4</option>
+                    <select v-model="filterCompany" @change="handleFilterChange">
+                        <option value="">All</option>
+                        <option v-for="company in uniqueCompanies" :key="company" :value="company">
+                            {{ company }}
+                        </option>
                     </select>
                 </div>
             </div>
         </div>
         <div class="button-container">
-            <button class="button">
+            <button class="button" type="button" @click="openModal">
                 <p class="mb-0">+</p>
                 <span>Create new</span>
             </button>
@@ -101,8 +96,8 @@
                             </span>
                         </td>
                         <td>
-                            <span :class="{ 'status-deactivated': isDeactivated(user.status) }">
-                                {{ user.status }}
+                            <span :class="statusClasses(user.status)">
+                                {{ formatStatus(user.status) }}
                             </span>
                         </td>
                         <td width="15%">
@@ -114,7 +109,7 @@
                             </div>
                         </td>
                         <td width="5%">
-                            <a href="#" class="unstyled">
+                            <router-link :to="`/detail/${user.id}`" class="unstyled">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 20 21"
                                     fill="none">
                                     <mask id="mask0_14_1048" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0"
@@ -127,7 +122,7 @@
                                             fill="black" />
                                     </g>
                                 </svg>
-                            </a>
+                            </router-link>
                         </td>
                     </tr>
                     <tr v-if="index < paginatedUsers.length - 1">
@@ -139,38 +134,93 @@
             </tbody>
 
         </table>
-        
+
     </div>
     <div v-if="totalPages > 1" class="pagination d-flex justify-content-center align-items-center gap-8 mt-16">
-            <button
-                class="pagination-button arrow"
-                type="button"
-                :disabled="currentPage === 1"
-                @click="goToPage(currentPage - 1)"
-            >
-                ‹
+        <button class="pagination-button arrow" type="button" :disabled="currentPage === 1"
+            @click="goToPage(currentPage - 1)">
+            ‹
+        </button>
+        <template v-for="(item, index) in paginationItems" :key="`pagination-${item.type}-${item.value || index}`">
+            <button v-if="item.type === 'page'" class="pagination-button"
+                :class="{ active: item.value === currentPage }" type="button" @click="goToPage(item.value)">
+                {{ item.value }}
             </button>
-            <template v-for="(item, index) in paginationItems" :key="`pagination-${item.type}-${item.value || index}`">
-                <button
-                    v-if="item.type === 'page'"
-                    class="pagination-button"
-                    :class="{ active: item.value === currentPage }"
-                    type="button"
-                    @click="goToPage(item.value)"
-                >
-                    {{ item.value }}
-                </button>
-                <span v-else class="pagination-ellipsis">…</span>
-            </template>
-            <button
-                class="pagination-button arrow"
-                type="button"
-                :disabled="currentPage === totalPages"
-                @click="goToPage(currentPage + 1)"
-            >
-                ›
-            </button>
+            <span v-else class="pagination-ellipsis">…</span>
+        </template>
+        <button class="pagination-button arrow" type="button" :disabled="currentPage === totalPages"
+            @click="goToPage(currentPage + 1)">
+            ›
+        </button>
+    </div>
+    <teleport to="body">
+        <div v-if="isModalOpen" class="modal-backdrop" role="dialog" aria-modal="true" @click.self="closeModal">
+            <div class="modal">
+                <header class="modal-header">
+                    <h2>Create User</h2>
+                    <button type="button" class="modal-close" @click="closeModal" aria-label="Close">×</button>
+                </header>
+                <form class="modal-body" @submit.prevent="submitNewUser">
+                    <div class="modal-row">
+                        <label class="modal-field">
+                            First Name
+                            <input v-model.trim="newUser.firstName" type="text" required />
+                        </label>
+                        <label class="modal-field">
+                            Last Name
+                            <input v-model.trim="newUser.lastName" type="text" required />
+                        </label>
+                    </div>
+                    <div class="modal-row">
+                        <label class="modal-field">
+                            Email
+                            <input v-model.trim="newUser.email" type="email" required />
+                        </label>
+                        <label class="modal-field">
+                            Phone
+                            <input v-model.trim="newUser.phone" type="text" required />
+                        </label>
+                    </div>
+                    <div class="modal-row">
+                        <label class="modal-field">
+                            Type
+                            <select v-model="newUser.type" required>
+                                <option value="" disabled>Select type</option>
+                                <option value="service">Service</option>
+                                <option value="connect">Connect</option>
+                            </select>
+                        </label>
+                        <label class="modal-field">
+                            Status
+                            <select v-model="newUser.status" required>
+                                <option value="" disabled>Select status</option>
+                                <option value="active">Active</option>
+                                <option value="deactivated">Deactivated</option>
+                                <option value="inactive">Inactive</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div class="modal-row">
+                        <label class="modal-field">
+                            Company Name
+                            <input v-model.trim="newUser.companyName" type="text" required />
+                        </label>
+                        <label class="modal-field">
+                            Address
+                            <input v-model.trim="newUser.address" type="text" required />
+                        </label>
+                    </div>
+                    <div v-if="feedbackMessage" class="modal-feedback" :class="feedbackType">
+                        {{ feedbackMessage }}
+                    </div>
+                    <footer class="modal-footer">
+                        <button type="button" class="button secondary" @click="closeModal">Cancel</button>
+                        <button type="submit" class="button primary">Create</button>
+                    </footer>
+                </form>
+            </div>
         </div>
+    </teleport>
 </template>
 
 <script>
@@ -181,7 +231,23 @@ export default {
             users: [],
             currentPage: 1,
             pageSize: 14,
-            searchQuery: ''
+            searchQuery: '',
+            filterType: '',
+            filterStatus: '',
+            filterCompany: '',
+            isModalOpen: false,
+            feedbackMessage: '',
+            feedbackType: '', // 'success' or 'error'
+            newUser: {
+                firstName: '',
+                lastName: '',
+                email: '',
+                phone: '',
+                type: '',
+                status: '',
+                companyName: '',
+                address: ''
+            }
         };
     },
     async mounted() {
@@ -232,31 +298,72 @@ export default {
             return items;
         },
         filteredUsers() {
-            if (!this.searchQuery) {
-                return this.users;
+            let filtered = this.users;
+
+            // Apply search query filter
+            if (this.searchQuery) {
+                const query = this.searchQuery.toLowerCase();
+                filtered = filtered.filter((user) => {
+                    const valuesToCheck = [
+                        user.firstName,
+                        user.lastName,
+                        user.email,
+                        user.phone,
+                        user.type,
+                        user.status,
+                        user.companyName,
+                        user.address
+                    ];
+
+                    return valuesToCheck.some((value) => {
+                        if (value == null) {
+                            return false;
+                        }
+                        return String(value).toLowerCase().includes(query);
+                    });
+                });
             }
 
-            const query = this.searchQuery.toLowerCase();
-
-            return this.users.filter((user) => {
-                const valuesToCheck = [
-                    user.firstName,
-                    user.lastName,
-                    user.email,
-                    user.phone,
-                    user.type,
-                    user.status,
-                    user.companyName,
-                    user.address
-                ];
-
-                return valuesToCheck.some((value) => {
-                    if (value == null) {
-                        return false;
-                    }
-                    return String(value).toLowerCase().includes(query);
+            // Apply type filter
+            if (this.filterType) {
+                filtered = filtered.filter((user) => {
+                    return user.type && String(user.type).toLowerCase() === this.filterType.toLowerCase();
                 });
-            });
+            }
+
+            // Apply status filter
+            if (this.filterStatus) {
+                filtered = filtered.filter((user) => {
+                    return user.status && String(user.status).toLowerCase() === this.filterStatus.toLowerCase();
+                });
+            }
+
+            // Apply company filter
+            if (this.filterCompany) {
+                filtered = filtered.filter((user) => {
+                    return user.companyName && user.companyName === this.filterCompany;
+                });
+            }
+
+            return filtered;
+        },
+        uniqueTypes() {
+            const types = this.users
+                .map((user) => user.type)
+                .filter((type) => type != null && String(type).trim() !== '');
+            return [...new Set(types.map((type) => String(type).toLowerCase()))].sort();
+        },
+        uniqueStatuses() {
+            const statuses = this.users
+                .map((user) => user.status)
+                .filter((status) => status != null && String(status).trim() !== '');
+            return [...new Set(statuses.map((status) => String(status).toLowerCase()))].sort();
+        },
+        uniqueCompanies() {
+            const companies = this.users
+                .map((user) => user.companyName)
+                .filter((company) => company != null && String(company).trim() !== '');
+            return [...new Set(companies)].sort();
         }
     },
     methods: {
@@ -279,6 +386,9 @@ export default {
         handleSearch() {
             this.currentPage = 1;
         },
+        handleFilterChange() {
+            this.currentPage = 1;
+        },
         ensurePageInRange() {
             if (this.currentPage > this.totalPages) {
                 this.currentPage = this.totalPages;
@@ -288,7 +398,23 @@ export default {
             if (!status) {
                 return false;
             }
-            return String(status).trim().toLowerCase() === 'deactivated';
+            return String(status).trim() === 'deactivated';
+        },
+        isInActive(status) {
+            if (!status) {
+                return false;
+            }
+            return String(status).trim().toLowerCase() === 'inactive';
+        },
+        statusClasses(status) {
+            const classes = [];
+            if (this.isDeactivated(status)) {
+                classes.push('status-deactivated');
+            }
+            if (this.isInActive(status)) {
+                classes.push('status-inactive');
+            }
+            return classes;
         },
         typeClass(type) {
             if (!type) {
@@ -302,6 +428,73 @@ export default {
                 return 'connect';
             }
             return '';
+        },
+        formatStatus(status) {
+            if (!status) {
+                return '';
+            }
+            const value = String(status).trim();
+            if (!value) {
+                return '';
+            }
+            return value.charAt(0).toUpperCase() + value.slice(1);
+        },
+        openModal() {
+            this.resetNewUser();
+            this.feedbackMessage = '';
+            this.feedbackType = '';
+            this.isModalOpen = true;
+        },
+        closeModal() {
+            this.isModalOpen = false;
+            this.feedbackMessage = '';
+            this.feedbackType = '';
+        },
+        resetNewUser() {
+            this.newUser = {
+                firstName: '',
+                lastName: '',
+                email: '',
+                phone: '',
+                type: '',
+                status: '',
+                companyName: '',
+                address: ''
+            };
+        },
+        async submitNewUser() {
+            this.feedbackMessage = '';
+            this.feedbackType = '';
+            
+            try {
+                const response = await fetch('/api/users', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(this.newUser)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Request failed with status ${response.status}`);
+                }
+
+                const createdUser = await response.json();
+                this.users.push(createdUser);
+                this.ensurePageInRange();
+                this.currentPage = this.totalPages;
+                
+                this.feedbackMessage = 'User created successfully!';
+                this.feedbackType = 'success';
+                
+                setTimeout(() => {
+                    this.closeModal();
+                }, 1500);
+            } catch (error) {
+                console.error('Failed to create user', error);
+                this.feedbackMessage = `Failed to create user: ${error.message}`;
+                this.feedbackType = 'error';
+            }
         }
     }
 }
