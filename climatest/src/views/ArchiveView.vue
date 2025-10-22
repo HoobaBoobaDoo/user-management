@@ -64,7 +64,7 @@
                 </div>
             </div>
         </div>
-        <div class="button-container">
+        <div class="button-container create-button">
             <button class="button" type="button" @click="openModal">
                 <p class="mb-0">+</p>
                 <span>Create new</span>

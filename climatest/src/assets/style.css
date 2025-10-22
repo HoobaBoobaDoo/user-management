@@ -360,7 +360,6 @@ body {
 .tools {
   align-items: center;
   width: 100%;
-  gap: 20px;
 }
 
 .input-field {
@@ -373,6 +372,68 @@ body {
   background: var(--light-color);
   height: 50px;
   border: none;
+  margin-right: 20px;
+}
+
+@media(max-width: 1300px) {
+  .input-field {
+    width: 100%;
+    padding: 12px;
+    height: auto;
+    min-height: 40px;
+    margin-right: 0;
+  }
+
+  .input-field p {
+    font-size: var(--font-size-sm);
+  }
+
+  input, select {
+    font-size: var(--font-size-sm);
+    min-width: 60px;
+  }
+
+  .create-button {
+    width: 100% !important;
+  }
+
+  /* Archive Top Bar */
+  .top-archive {
+    flex-direction: column;
+    gap: 16px;
+    align-items: stretch !important;
+  }
+
+  .tools {
+    flex-direction: column;
+    width: 100%;
+    gap: 12px;
+  }
+
+  .input-field {
+    width: 100%;
+    padding: 12px;
+    height: auto;
+    min-height: 40px;
+  }
+
+  .input-field p {
+    font-size: var(--font-size-sm);
+  }
+
+  input, select {
+    font-size: var(--font-size-sm);
+    min-width: 60px;
+  }
+
+  .button-container {
+    width: 100%;
+  }
+
+  .button-container .button {
+    width: 100%;
+    justify-content: center;
+  }
 }
 
 
@@ -390,7 +451,6 @@ select {
   background: none;
   padding: 0;
   margin: 0;
-  min-width: 90px;
   max-width: 300px;
 }
 
@@ -489,7 +549,9 @@ select option:checked {
 }
 
 .long-input {
-  min-width: 300px;
+  min-width: 100px;
+  max-width: 300px;
+  width: 100%
 }
 
 /* User list styles */
@@ -1214,6 +1276,18 @@ Detail page:
 
   .input-field {
     width: 100%;
+    padding: 12px;
+    height: auto;
+    min-height: 40px;
+  }
+
+  .input-field p {
+    font-size: var(--font-size-sm);
+  }
+
+  input, select {
+    font-size: var(--font-size-sm);
+    min-width: 60px;
   }
 
   .button-container {
@@ -1374,6 +1448,24 @@ Detail page:
   }
 
   /* Archive */
+  .input-field {
+    padding: 10px;
+    gap: 12px;
+  }
+
+  .input-field p {
+    font-size: var(--font-size-xs);
+  }
+
+  input, select {
+    font-size: var(--font-size-xs);
+    min-width: 50px;
+  }
+
+  .button-container p {
+    font-size: var(--font-size-md);
+  }
+
   .user-table {
     min-width: 700px;
     font-size: var(--font-size-sm);
