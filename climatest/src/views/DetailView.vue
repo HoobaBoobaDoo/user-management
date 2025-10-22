@@ -380,9 +380,10 @@ export default {
             const classes = [];
             if (this.isDeactivated(status)) {
                 classes.push('status-deactivated');
-            }
-            if (this.isInActive(status)) {
+            } else if (this.isInActive(status)) {
                 classes.push('status-inactive');
+            } else if (this.isActive(status)) {
+                classes.push('status-active');
             }
             return classes;
         },
@@ -390,13 +391,19 @@ export default {
             if (!status) {
                 return false;
             }
-            return String(status).trim() === 'deactivated';
+            return String(status).trim().toLowerCase() === 'deactivated';
         },
         isInActive(status) {
             if (!status) {
                 return false;
             }
             return String(status).trim().toLowerCase() === 'inactive';
+        },
+        isActive(status) {
+            if (!status) {
+                return false;
+            }
+            return String(status).trim().toLowerCase() === 'active';
         },
         formatStatus(status) {
             if (!status) {
