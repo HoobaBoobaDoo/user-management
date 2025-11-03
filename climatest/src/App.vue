@@ -69,7 +69,7 @@ const closeMobileMenu = () => {
     <div class="mobile-menu" :class="{ 'mobile-menu-open': isMobileMenuOpen }">
       <div class="mobile-menu-header">
         <img src="/assets/img/climatest-icon.svg" alt="Climatest Logo" class="logo" />
-        <h2 class="mobile-title">Climatest</h2>
+        <h2 class="mobile-title">Admin Panel</h2>
       </div>
       
       <ul class="mobile-nav-links list-unstyled">
